@@ -1,0 +1,64 @@
+@font-face {
+  font-family: 'URWGeometricArabic-Regular';
+  src: local('URWGeometricArabic-Regular'),
+    url(./assets/fonts/URWGeometricArabic-Regular.ttf) format('opentype');
+}
+
+@font-face {
+  font-family: 'URWGeometricArabic-Bold';
+  font-weight: bold;
+  src: local('URWGeometricArabic-Bold'),
+    url(./assets/fonts/URWGeometricArabic-Bold.ttf) format('opentype');
+}
+
+@font-face {
+  font-family: 'URWGeometricArabic-Medium';
+  font-weight: 500;
+  src: local('URWGeometricArabic-Medium'),
+    url(./assets/fonts/URWGeometricArabic-Medium.ttf) format('opentype');
+}
+
+@font-face {
+  font-family: 'URWGeometricArabic-SemiBold';
+  font-weight: 600;
+  src: local('URWGeometricArabic-SemiBold'),
+    url(./assets/fonts/URWGeometricArabic-SemiBold.ttf) format('opentype');
+}
+@font-face {
+  font-family: 'Inter-Regular';
+  src: local('Inter-Regular'),
+    url(./assets/fonts/Inter-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter-Bold';
+  font-weight: bold;
+  src: local('Inter-Bold'),
+    url(./assets/fonts/Inter-Bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter-Medium';
+  font-weight: 500;
+  src: local('Inter-Medium'),
+    url(./assets/fonts/Inter-Medium.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter-Semibold';
+  font-weight: 600;
+  src: local('Inter-Semibold'),
+    url(./assets/fonts/Inter-SemiBold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter-Italic';
+  font-style: 'italic';
+  src: local('Inter-Italic'),
+    url(./assets/fonts/Inter-italic.ttf) format('truetype');
+}
+
+body {
+  font-family: 'URWGeometricArabic-Regular', -apple-system, Montserrat,
+    sans-serif;
+}

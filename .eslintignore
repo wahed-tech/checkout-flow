@@ -1,0 +1,15 @@
+node_modules
+ios
+android
+.vscode
+.husky
+package.json
+yarn.lock
+*.graphql
+src/translations/*
+src/resources/fonts/*
+src/selection.json
+.eslintrc.js
+*.png
+src/**/*.typegen.ts
+__generated__

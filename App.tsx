@@ -1,118 +1,93 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import * as yup from 'yup'; // Import the 'yup' library
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import {Text} from './src/ui/components/Text';
+import {Button} from './src/ui/components/Button';
+import {Form, FormTextInput} from './src/ui/components/Form';
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const onPay = data => {
+    console.log('zohaib ----- data', data);
   };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
+    <SafeAreaView>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
+        style={styles.container}>
+        <Text variant="headline2">Payment details</Text>
+        <Form
+          defaultValues={{
+            cardNumber: '',
+            expiryDate: '',
+            cvv: '',
+          }}
+          validationSchema={getCardNumberSchema()}>
+          {({handleSubmit}) => {
+            return (
+              <>
+                <View>
+                  <Text variant="label2">Card Number </Text>
+                  <FormTextInput
+                    value=""
+                    placeholder="1234 567 8901 1234"
+                    name={'cardNumber'}
+                  />
+                </View>
+                <View style={styles.row}>
+                  <View style={{flex: 1, marginEnd: 10}}>
+                    <Text variant="label2">Expiry date</Text>
+                    <FormTextInput
+                      maxLength={5}
+                      placeholder="MM/YY"
+                      name={'expiryDate'}
+                    />
+                  </View>
+                  <View style={{flex: 1, marginStart: 10}}>
+                    <Text variant="label2">CVV</Text>
+                    <FormTextInput
+                      maxLength={3}
+                      placeholder="123"
+                      name={'cvv'}
+                    />
+                  </View>
+                </View>
+                <Button
+                  onPress={handleSubmit(onPay)}
+                  size="medium"
+                  marginTop="m">
+                  Pay
+                </Button>
+              </>
+            );
+          }}
+        </Form>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
+const getCardNumberSchema = () =>
+  yup.object().shape({
+    cardNumber: yup.string().required("Card number can't be empty"),
+    expiryDate: yup
+      .string()
+      .trim("`Expiry date` can't be empty")
+      .required('Expiry date is required'),
+    cvv: yup.string().required('CVV is required'),
+  });
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    margin: 20,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  input: {
+    height: 60,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  row: {
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
-
 export default App;

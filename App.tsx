@@ -76,7 +76,7 @@ const App = (): React.JSX.Element => {
         .max(19)
         .required("Card number can't be empty"),
       expiryDate: string()
-        .matches(/^[0-9]+$/, 'Must be only digits')
+        .matches(/^[0-9/]+$/, 'Must be only digits')
         .cardExpiry()
         .required('Expiry date is required'),
       cvv: string()
@@ -92,7 +92,10 @@ const App = (): React.JSX.Element => {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={styles.container}>
-        <Text variant="headline2">Payment details</Text>
+        <Text variant="headline1">Payment details</Text>
+        <Text variant="body2" color="lightGray3" marginBottom="xl">
+          Please enter your card details to continue
+        </Text>
         <Form
           defaultValues={{
             fullName: '',
@@ -106,14 +109,18 @@ const App = (): React.JSX.Element => {
             return (
               <>
                 <View>
-                  <Text variant="label2">Full Name </Text>
+                  <Text variant="label2" color="lightGray2" marginBottom="-s">
+                    Name on card
+                  </Text>
                   <FormTextInput
                     value=""
                     placeholder="John Doe"
                     name="fullName"
                     maxLength={19}
                   />
-                  <Text variant="label2">Card Number </Text>
+                  <Text variant="label2" color="lightGray2" marginBottom="-s">
+                    Card number
+                  </Text>
                   <FormTextInput
                     value=""
                     placeholder="1234 567 8901 1234"
@@ -123,7 +130,9 @@ const App = (): React.JSX.Element => {
                 </View>
                 <View style={styles.row}>
                   <View style={{flex: 1, marginEnd: 10}}>
-                    <Text variant="label2">Expiry date</Text>
+                    <Text variant="label2" color="lightGray2" marginBottom="-s">
+                      Expiry date
+                    </Text>
                     <FormTextInput
                       maxLength={5}
                       placeholder="MM/YY"
@@ -131,13 +140,22 @@ const App = (): React.JSX.Element => {
                     />
                   </View>
                   <View style={{flex: 1, marginStart: 10}}>
-                    <Text variant="label2">CVV</Text>
+                    <Text variant="label2" color="lightGray2" marginBottom="-s">
+                      CVV
+                    </Text>
                     <FormTextInput maxLength={3} placeholder="123" name="cvv" />
                   </View>
-                  <View>
-                    <FormCheckbox name="shouldSaveCard" />
-                  </View>
                 </View>
+
+                <FormCheckbox
+                  name="shouldSaveCard"
+                  label="Save my card"
+                  marginTop="m"
+                />
+
+                <Text variant="body4" color="lightGray3" marginTop="xxxl">
+                  By clicking proceeding I agree to the terms and conditions
+                </Text>
                 <Button
                   onPress={handleSubmit(onPay)}
                   size="medium"

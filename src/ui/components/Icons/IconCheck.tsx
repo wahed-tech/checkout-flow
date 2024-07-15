@@ -3,9 +3,9 @@ import * as React from 'react';
 import Svg, {Path, SvgProps} from 'react-native-svg';
 
 export const IconCheck = (props: SvgProps) => (
-  <Svg fill="none" viewBox="0 0 24 24" {...props}>
+  <Svg fill="none" viewBox="0 0 24 24" height={20} width={20}>
     <Path
-      fill="#303030"
+      fill="#2ECC71"
       d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z"
     />
   </Svg>

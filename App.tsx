@@ -8,6 +8,7 @@ import {Button} from './src/ui/components/Button';
 import {Form, FormTextInput} from './src/ui/components/Form';
 
 import * as yup from 'yup';
+import {FormCheckbox} from './src/ui/components/Form/FormCheckbox';
 declare module 'yup' {
   interface StringSchema<TType, TContext, TDefault, TFlags> {
     cardExpiry(): StringSchema<TType, TContext, TDefault, TFlags>;
@@ -27,32 +28,48 @@ yup.addMethod(yup.string, 'cardExpiry', function (message) {
     if (month.length !== 2 || year.length !== 2) {
       return createError({path, message: message || 'MM/YY format required'});
     }
-    if (parseInt(month) > 12 || parseInt(month) < 1) {
+    if (parseInt(month, 2) > 12 || parseInt(month, 2) < 1) {
       return createError({path, message: message || 'Month is invalid'});
     }
 
     const currentYear = new Date().getFullYear().toString().slice(2);
     if (
-      parseInt(year) === parseInt(currentYear) &&
-      parseInt(month) < new Date().getMonth()
+      parseInt(year, 2) === parseInt(currentYear, 2) &&
+      parseInt(month, 2) < new Date().getMonth()
     ) {
       return false;
     }
-    if (parseInt(year) < parseInt(currentYear)) {
+    if (parseInt(year, 2) < parseInt(currentYear, 2)) {
       return createError({path, message: message || 'Year is invalid'});
     }
 
     return true; // Valid expiry date
   });
 });
-
-function App(): React.JSX.Element {
+const styles = StyleSheet.create({
+  container: {
+    margin: 20,
+  },
+  row: {
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+});
+const App = (): React.JSX.Element => {
   const onPay = data => {
     // DO Something with data
   };
 
   const getCardNumberSchema = () =>
     object().shape({
+      fullName: string()
+        .min(2)
+        .matches(
+          /^[a-zA-Z]*[a-zA-Z-']+( [a-zA-Z-']+)*$/,
+          'full name should have only alphabets',
+        )
+        .required('Full name is required'),
       cardNumber: string()
         .matches(/^[0-9]+$/, 'Must be only digits')
         .min(16)
@@ -67,7 +84,9 @@ function App(): React.JSX.Element {
         .min(3)
         .max(4)
         .required('CVV is required'),
+      shouldSaveCard: yup.boolean().required('Should save card is required'),
     });
+
   return (
     <SafeAreaView>
       <ScrollView
@@ -76,20 +95,29 @@ function App(): React.JSX.Element {
         <Text variant="headline2">Payment details</Text>
         <Form
           defaultValues={{
+            fullName: '',
             cardNumber: '',
             expiryDate: '',
             cvv: '',
+            shouldSaveCard: true,
           }}
           validationSchema={getCardNumberSchema()}>
           {({handleSubmit}) => {
             return (
               <>
                 <View>
+                  <Text variant="label2">Full Name </Text>
+                  <FormTextInput
+                    value=""
+                    placeholder="John Doe"
+                    name="fullName"
+                    maxLength={19}
+                  />
                   <Text variant="label2">Card Number </Text>
                   <FormTextInput
                     value=""
                     placeholder="1234 567 8901 1234"
-                    name={'cardNumber'}
+                    name="cardNumber"
                     maxLength={19}
                   />
                 </View>
@@ -99,16 +127,15 @@ function App(): React.JSX.Element {
                     <FormTextInput
                       maxLength={5}
                       placeholder="MM/YY"
-                      name={'expiryDate'}
+                      name="expiryDate"
                     />
                   </View>
                   <View style={{flex: 1, marginStart: 10}}>
                     <Text variant="label2">CVV</Text>
-                    <FormTextInput
-                      maxLength={3}
-                      placeholder="123"
-                      name={'cvv'}
-                    />
+                    <FormTextInput maxLength={3} placeholder="123" name="cvv" />
+                  </View>
+                  <View>
+                    <FormCheckbox name="shouldSaveCard" />
                   </View>
                 </View>
                 <Button
@@ -124,19 +151,6 @@ function App(): React.JSX.Element {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    margin: 20,
-  },
-  input: {
-    height: 60,
-  },
-  row: {
-    marginTop: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-});
 export default App;

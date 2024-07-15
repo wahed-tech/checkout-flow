@@ -1,5 +1,4 @@
 import {FC, RefAttributes} from 'react';
-import {IconProps} from '@wahed-tech/icons';
 
 import {UseMarginProps, UseTestIDProps} from '../../hooks';
 
@@ -84,7 +83,7 @@ export type InputTextProps = {
   /**
    * Prefix icon to be shown on the start of the component
    */
-  prefixIcon?: FC<IconProps>;
+  prefixIcon?: FC<any>;
 
   /**
    * Callback function called when clear icon is clicked

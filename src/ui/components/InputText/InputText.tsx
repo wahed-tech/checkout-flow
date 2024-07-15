@@ -17,7 +17,7 @@ import {
   View,
 } from 'react-native';
 
-// import {IconAbout, IconCheck, IconClose} from '@wahed-tech/icons';
+import {IconAbout, IconCheck, IconClose} from '../Icons';
 import {useMargin, useTestID} from '../../hooks';
 import {Theme} from '../ThemeProvider';
 import {Text} from '../Text';
@@ -174,15 +174,15 @@ export const InputText = forwardRef<InputTextRef, InputTextProps>(
             />
           </Animated.View>
           <View style={styles.iconContainer}>
-            {/* {isValidated && !error && (
-              <IconCheck size="xxs" color={theme.colors.approved} />
+            {isValidated && !error && (
+              <IconCheck height={20} color={theme.colors.approved} />
             )}
-            {!!error && <IconAbout size="xxs" color={theme.colors.error} />} */}
+            {!!error && <IconAbout height={20} color={theme.colors.error} />}
             {!!value && !isDisabled && !isReadOnly && (
               <TouchableOpacity
                 onPress={handleOnClearText}
                 style={{marginStart: theme.spacing.xxxs}}>
-                {/* <IconClose size="xxs" color={theme.colors.darkGray} /> */}
+                <IconClose height={20} color={theme.colors.darkGray} />
               </TouchableOpacity>
             )}
           </View>

@@ -40,10 +40,10 @@ yup.addMethod(string, 'cardExpiry', function (message: any) {
       return createError({path, message: message || 'Month is in past'});
     }
 
-    if (month < currentMonth && year <= currentYear) {
+    if (month < currentMonth && year < currentYear) {
       return createError({path, message: message || 'Month is in past'});
     }
-    if (month > currentMonth && year <= currentYear) {
+    if (month > currentMonth && year === currentYear) {
       return createError({path, message: message || 'Year is in past'});
     }
 

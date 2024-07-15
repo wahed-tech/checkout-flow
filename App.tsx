@@ -8,6 +8,7 @@ import {Button} from './src/ui/components/Button';
 import {Form, FormTextInput} from './src/ui/components/Form';
 import {FormCheckbox} from './src/ui/components/Form/FormCheckbox';
 import {Modal} from './src/ui/components/Modal';
+import {set} from 'react-hook-form';
 
 declare module 'yup' {
   interface StringSchema<TType, TContext, TDefault, TFlags> {
@@ -21,10 +22,10 @@ yup.addMethod(string, 'cardExpiry', function (message: any) {
     if (!expiryDate) {
       return false;
     }
+    const currentYear = new Date().getFullYear().toString().slice(2);
+    const currentMonth = new Date().getMonth() + 1;
     const [month, year] = expiryDate.split('/');
 
-    console.log('month', month);
-    console.log('year', year);
     if (!month || !year) {
       return createError({path, message: message || 'invalid expiry date'});
     }
@@ -35,14 +36,15 @@ yup.addMethod(string, 'cardExpiry', function (message: any) {
       return createError({path, message: message || 'Month is invalid'});
     }
 
-    const currentYear = new Date().getFullYear().toString().slice(2);
-    const currentMonth = new Date().getMonth() + 1;
     if (year === currentYear && month < new Date().getMonth()) {
       return createError({path, message: message || 'Month is in past'});
     }
 
     if (month < currentMonth && year <= currentYear) {
       return createError({path, message: message || 'Month is in past'});
+    }
+    if (month > currentMonth && year <= currentYear) {
+      return createError({path, message: message || 'Year is in past'});
     }
 
     return true; // Valid expiry date
@@ -61,14 +63,15 @@ const styles = StyleSheet.create({
 const App = (): React.JSX.Element => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [shouldShow3dsModal, setShouldShow3dsModal] = useState(false);
+  const [isError, setIsError] = useState(false);
   const onPay = () => {
     setIsSubmitting(true);
     // Simulating a network request
-    // Remove this setTimeout in production
+    setIsError(true);
     setShouldShow3dsModal(true);
     setTimeout(() => {
       setIsSubmitting(false);
-    }, 3000);
+    }, 2000);
     // DO Something with data
   };
 
@@ -187,6 +190,16 @@ const App = (): React.JSX.Element => {
           <Text margin="m">
             3D secure authentication is required. Please complete the
             authentication process to continue
+          </Text>
+        </Modal>
+        <Modal
+          variant="full-width"
+          isVisible={isError}
+          onClose={() => {
+            setIsError(false);
+          }}>
+          <Text margin="m">
+            There was an error processing your payment. Please try again later
           </Text>
         </Modal>
       </ScrollView>

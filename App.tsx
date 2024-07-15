@@ -1,22 +1,22 @@
-import React from 'react';
-import {number, object, string} from 'yup'; // Import the 'yup' library
-
+import React, {useState} from 'react';
+import {boolean, object, string} from 'yup'; // Import the 'yup' library
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import * as yup from 'yup';
 
 import {Text} from './src/ui/components/Text';
 import {Button} from './src/ui/components/Button';
 import {Form, FormTextInput} from './src/ui/components/Form';
-
-import * as yup from 'yup';
 import {FormCheckbox} from './src/ui/components/Form/FormCheckbox';
+import {Modal} from './src/ui/components/Modal';
+
 declare module 'yup' {
   interface StringSchema<TType, TContext, TDefault, TFlags> {
     cardExpiry(): StringSchema<TType, TContext, TDefault, TFlags>;
   }
 }
 // Adding a custom method to yup for expiry date validation
-yup.addMethod(yup.string, 'cardExpiry', function (message) {
-  return this.test('cardExpiry', message, function (expiryDate) {
+yup.addMethod(string, 'cardExpiry', function (message: any) {
+  return this.test('cardExpiry', message, function (expiryDate: any) {
     const {path, createError} = this;
     if (!expiryDate) {
       return false;
@@ -57,7 +57,16 @@ const styles = StyleSheet.create({
   },
 });
 const App = (): React.JSX.Element => {
-  const onPay = data => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [shouldShow3dsModal, setShouldShow3dsModal] = useState(false);
+  const onPay = () => {
+    setIsSubmitting(true);
+    // Simulating a network request
+    // Remove this setTimeout in production
+    setShouldShow3dsModal(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, 3000);
     // DO Something with data
   };
 
@@ -84,7 +93,7 @@ const App = (): React.JSX.Element => {
         .min(3)
         .max(4)
         .required('CVV is required'),
-      shouldSaveCard: yup.boolean().required('Should save card is required'),
+      shouldSaveCard: boolean().required('Should save card is required'),
     });
 
   return (
@@ -157,6 +166,7 @@ const App = (): React.JSX.Element => {
                   By clicking proceeding I agree to the terms and conditions
                 </Text>
                 <Button
+                  isLoading={isSubmitting}
                   onPress={handleSubmit(onPay)}
                   size="medium"
                   marginTop="m">
@@ -166,6 +176,16 @@ const App = (): React.JSX.Element => {
             );
           }}
         </Form>
+        <Modal
+          isVisible={shouldShow3dsModal}
+          onClose={() => {
+            setShouldShow3dsModal(false);
+          }}>
+          <Text>
+            3D secure authentication is required. Please complete the
+            authentication process to continue
+          </Text>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   );

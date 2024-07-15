@@ -11,7 +11,7 @@ import {
   useForm,
   UseFormReset,
   UseFormReturn,
-  ValidationMode
+  ValidationMode,
 } from 'react-hook-form';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -44,7 +44,7 @@ export const Form = <T extends FieldValues>({
   criteriaMode,
   errors,
   onError,
-  style
+  style,
 }: FormProps<T>) => {
   const resolver = validationSchema
     ? (yupResolver(validationSchema) as unknown as Resolver<T>)
@@ -58,7 +58,7 @@ export const Form = <T extends FieldValues>({
     resetOptions,
     shouldUnregister,
     criteriaMode,
-    mode: validationMode
+    mode: validationMode,
   });
   const {handleSubmit, reset, watch, formState} = methods;
 
@@ -72,7 +72,7 @@ export const Form = <T extends FieldValues>({
     onError,
     onSubmitOnChange,
     reset,
-    watch
+    watch,
   ]);
 
   return (

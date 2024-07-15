@@ -179,11 +179,12 @@ const App = (): React.JSX.Element => {
           }}
         </Form>
         <Modal
+          variant="full-height"
           isVisible={shouldShow3dsModal}
           onClose={() => {
             setShouldShow3dsModal(false);
           }}>
-          <Text>
+          <Text margin="m">
             3D secure authentication is required. Please complete the
             authentication process to continue
           </Text>

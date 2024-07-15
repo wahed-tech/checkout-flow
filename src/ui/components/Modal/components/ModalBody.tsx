@@ -3,7 +3,6 @@ import {View} from 'react-native';
 
 import {IconClose} from '../../Icons';
 import {UseTestIDProps} from '../../../hooks';
-import {useTheme} from '../../../hooks/useTheme';
 import {Knob} from '../../Knob';
 import {Theme} from '../../ThemeProvider';
 
@@ -37,7 +36,7 @@ export const ModalBody: FC<PropsWithChildren<ModalBodyProps>> = ({
   onClose,
   children,
 }) => {
-  const theme = useTheme();
+  const theme = Theme;
 
   return (
     <View

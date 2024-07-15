@@ -2,9 +2,10 @@ import React, {FC, PropsWithChildren, useEffect, useRef, useState} from 'react';
 import {Animated, Modal, Pressable, View} from 'react-native';
 
 import {IconClose} from '../../Icons';
-import {useTestID, useTheme} from '../../../hooks';
+import {useTestID} from '../../../hooks';
 import {useStyles} from '../Modal.styles';
 import {ModalProps} from '../props';
+import {Theme} from '../../ThemeProvider';
 
 export const ModalOverlay: FC<PropsWithChildren<ModalProps>> = ({
   backgroundColor = 'primary',
@@ -23,7 +24,7 @@ export const ModalOverlay: FC<PropsWithChildren<ModalProps>> = ({
     isCloseButtonVisible: !!onClose,
   });
   const fadeAnim = useRef(new Animated.Value(1)).current;
-  const theme = useTheme();
+  const theme = Theme;
   const {getTestID} = useTestID({testID: testID});
 
   useEffect(() => {

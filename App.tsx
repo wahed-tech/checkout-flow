@@ -22,25 +22,27 @@ yup.addMethod(string, 'cardExpiry', function (message: any) {
       return false;
     }
     const [month, year] = expiryDate.split('/');
+
+    console.log('month', month);
+    console.log('year', year);
     if (!month || !year) {
       return createError({path, message: message || 'invalid expiry date'});
     }
     if (month.length !== 2 || year.length !== 2) {
       return createError({path, message: message || 'MM/YY format required'});
     }
-    if (parseInt(month, 2) > 12 || parseInt(month, 2) < 1) {
+    if (month > 12 || month < 1) {
       return createError({path, message: message || 'Month is invalid'});
     }
 
     const currentYear = new Date().getFullYear().toString().slice(2);
-    if (
-      parseInt(year, 2) === parseInt(currentYear, 2) &&
-      parseInt(month, 2) < new Date().getMonth()
-    ) {
-      return false;
+    const currentMonth = new Date().getMonth() + 1;
+    if (year === currentYear && month < new Date().getMonth()) {
+      return createError({path, message: message || 'Month is in past'});
     }
-    if (parseInt(year, 2) < parseInt(currentYear, 2)) {
-      return createError({path, message: message || 'Year is invalid'});
+
+    if (month < currentMonth && year <= currentYear) {
+      return createError({path, message: message || 'Month is in past'});
     }
 
     return true; // Valid expiry date

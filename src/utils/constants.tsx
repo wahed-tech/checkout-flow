@@ -14,4 +14,4 @@ export const MBC_LIVE_PUBLIC_KEY_REGEX =
   /^pk_?(\w{8})-(\w{4})-(\w{4})-(\w{4})-(\w{12})$/;
 export const NAS_LIVE_PUBLIC_KEY_REGEX = /^pk_?[a-z2-7]{26}[a-z2-7*#$=]$/;
 
-export const PUBLIC_KEY = 'pk_test_4296fd52-efba-4a38-b6ce-cf0d93639d8a';
+export const PUBLIC_KEY = 'pk_sbox_grxs6c67galutp6ze6ilz4obzym';

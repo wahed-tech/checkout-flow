@@ -3,12 +3,17 @@ import {boolean, object, string} from 'yup';
 import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import * as yup from 'yup';
 
-import {Text} from './ui/components/Text';
-import {Button} from './ui/components/Button';
-import {Form, FormTextInput} from './ui/components/Form';
-import {FormCheckbox} from './ui/components/Form/FormCheckbox';
-import {Modal} from './ui/components/Modal';
-import {version} from '../package.json';
+import {Text} from '../ui/components/Text';
+import {Button} from '../ui/components/Button';
+import {Form, FormTextInput} from '../ui/components/Form';
+import {FormCheckbox} from '../ui/components/Form/FormCheckbox';
+import {Modal} from '../ui/components/Modal';
+import {
+  FrameCardTokenizationFailedEvent,
+  FrameCardTokenizedEvent,
+  TokenizationParams,
+} from './types/types';
+import {tokenize} from '../utils/http';
 declare module 'yup' {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface StringSchema<TType, TContext, TDefault, TFlags> {
@@ -66,80 +71,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export type Scheme =
-  | 'Visa'
-  | 'Mastercard'
-  | 'AMERICAN EXPRESS'
-  | 'Diners Club International'
-  | 'Maestro'
-  | 'Discover'
-  | 'Mada';
-
-export type CardType = 'Credit' | 'Debit' | 'Prepaid' | 'Charge';
-export type CardCategory = 'Consumer' | 'Commercial';
-
-export type GatewayBillingAddress = {
-  address_line1?: string;
-  address_line2?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-  country?: string;
-};
-
-export type GatewayPhone = {
-  number?: string;
-};
-export type FrameCardTokenizedEvent = {
-  type: string;
-  token: string;
-  expires_on: string;
-  expiry_month: string;
-  expiry_year: string;
-  scheme?: Scheme;
-  last4: string;
-  bin: string;
-  card_type?: CardType;
-  card_category?: CardCategory;
-  issuer?: string;
-  issuer_country?: string;
-  product_id?: string;
-  product_type?: string;
-  billing_address?: GatewayBillingAddress;
-  phone?: GatewayPhone;
-  name?: string;
-};
-
-export type FrameCardTokenizationFailedEvent = {
-  error_codes: Array<string>;
-  error_type: string;
-  request_id: string;
-};
 type CardScreenProps = {
-  key: string;
+  checkoutKey: string;
   cardTokenized: (e: FrameCardTokenizedEvent) => void;
   cardTokenizationFailed?: (e: FrameCardTokenizationFailedEvent) => void;
 };
-export type TokenizationParams = {
-  key: string;
-  body: TokenizationBody;
-};
-export type TokenizationBody = {
-  type: string;
-  number: string;
-  expiry_month: string;
-  expiry_year: string;
-  cvv: string;
-  name?: string;
-  billing_address?: GatewayBillingAddress;
-  phone?: Phone;
-};
-export type Phone = {
-  number?: string;
-};
 
 export const CardScreen: FC<CardScreenProps> = ({
-  key,
+  checkoutKey,
   cardTokenized,
   cardTokenizationFailed,
 }) => {
@@ -147,59 +86,37 @@ export const CardScreen: FC<CardScreenProps> = ({
   const [shouldShow3dsModal, setShouldShow3dsModal] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const tokenize = async (e: TokenizationParams) => {
-    // eslint-disable-next-line no-useless-catch
-    try {
-      const response = await fetch(e.key, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          'User-Agent': `frames-react-native/${version}`, // This can be changed based on wahed-app as user agent ?
-          Authorization: e.key,
-        },
-        body: JSON.stringify(e.body),
-      });
-
-      const json = await response.json();
-
-      if (response.ok) {
-        return json;
-      } else {
-        throw json;
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
-  const onPay = (data: {
+  const onPay = async (data: {
     fullName: string;
     cardNumber: string;
     expiryDate: string;
     cvv: string;
     shouldSaveCard: true;
   }) => {
-    setIsError(true);
     try {
       //    call to tokenize card
-      const tokenizedCard = tokenize({
-        key: key,
+
+      const tokenizeBody: TokenizationParams = {
+        key: checkoutKey,
         body: {
-          type: 'card',
+          type: '',
           number: data.cardNumber,
           expiry_month: data.expiryDate.split('/')[0],
           expiry_year: data.expiryDate.split('/')[1],
           cvv: data.cvv,
           name: data.fullName,
-          billing_address: undefined, // in case of billing address
-          phone: undefined, // in case phone number is required
+          billing_address: undefined,
+          phone: undefined,
         },
-      });
+      };
+      const tokenizedCard = await tokenize(tokenizeBody);
       //    card is tokenized call what to do in success case
       //    in case 3ds is required set shouldShow3dsModal to true
+      console.log(tokenizedCard);
       setShouldShow3dsModal(true);
       cardTokenized(tokenizedCard as unknown as FrameCardTokenizedEvent);
     } catch (error) {
+      console.log('zohaib', error);
       if (cardTokenizationFailed) {
         cardTokenizationFailed(error as any);
       }

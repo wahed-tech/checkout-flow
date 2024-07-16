@@ -1,17 +1,18 @@
 import React from 'react';
 import {SafeAreaView} from 'react-native';
 
+import {CardScreen} from './src/CardScreen/CardScreen';
 import {
-  CardScreen,
   FrameCardTokenizationFailedEvent,
   FrameCardTokenizedEvent,
-} from './src/CardScreen';
+} from './src/CardScreen/types/types';
+import {PUBLIC_KEY} from './src/utils/constants';
 
 const App = (): React.JSX.Element => {
   return (
     <SafeAreaView>
       <CardScreen
-        key="pk_test_1234567890"
+        checkoutKey={PUBLIC_KEY}
         cardTokenized={function (e: FrameCardTokenizedEvent): void {
           throw new Error('Function not implemented.');
         }}

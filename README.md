@@ -11,4 +11,4 @@ Use `CardScreen` from `src/CardScreen.tsx`
 | key                    |             Checkout key             |
 
 ### Demo
-![Demo](https://raw.githubusercontent.com/wahed-tech/checkout-flow/main/docs/demo.mp4)
+![Demo](https://raw.githubusercontent.com/wahed-tech/checkout-flow/main/docs/demo.gif)

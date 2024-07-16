@@ -15,3 +15,5 @@ export const MBC_LIVE_PUBLIC_KEY_REGEX =
 export const NAS_LIVE_PUBLIC_KEY_REGEX = /^pk_?[a-z2-7]{26}[a-z2-7*#$=]$/;
 
 export const PUBLIC_KEY = 'pk_sbox_grxs6c67galutp6ze6ilz4obzym';
+export const DUMMY_CARD_NUMBER = '4242424242424242';
+export const DUMMY_CVV = '100';

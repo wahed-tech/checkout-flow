@@ -112,7 +112,8 @@ export const CardScreen: FC<CardScreenProps> = ({
         },
       };
       const tokenizedCard = await tokenize(tokenizeBody);
-      setShouldShow3dsModal(true);
+      //  incase of 3ds we will show the modal and wait for the user to complete the 3ds
+      // setShouldShow3dsModal(true);
       cardTokenized(tokenizedCard as unknown as FrameCardTokenizedEvent);
     } catch (error) {
       setError(JSON.stringify(error));

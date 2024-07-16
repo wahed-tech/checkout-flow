@@ -85,6 +85,7 @@ export const CardScreen: FC<CardScreenProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [shouldShow3dsModal, setShouldShow3dsModal] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const onPay = async (data: {
     fullName: string;
@@ -94,8 +95,9 @@ export const CardScreen: FC<CardScreenProps> = ({
     shouldSaveCard: true;
   }) => {
     try {
-      //    call to tokenize card
-
+      setError(null);
+      setIsError(false);
+      setIsSubmitting(true);
       const tokenizeBody: TokenizationParams = {
         key: checkoutKey,
         body: {
@@ -110,16 +112,16 @@ export const CardScreen: FC<CardScreenProps> = ({
         },
       };
       const tokenizedCard = await tokenize(tokenizeBody);
-      //    card is tokenized call what to do in success case
-      //    in case 3ds is required set shouldShow3dsModal to true
-      console.log(tokenizedCard);
       setShouldShow3dsModal(true);
       cardTokenized(tokenizedCard as unknown as FrameCardTokenizedEvent);
     } catch (error) {
-      console.log('zohaib', error);
+      setError(JSON.stringify(error));
+      setIsError(true);
       if (cardTokenizationFailed) {
         cardTokenizationFailed(error as any);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -248,7 +250,8 @@ export const CardScreen: FC<CardScreenProps> = ({
             setIsError(false);
           }}>
           <Text margin="m">
-            There was an error processing your payment. Please try again later
+            There was an error processing your payment. Please try again later{' '}
+            {error}
           </Text>
         </Modal>
       </ScrollView>

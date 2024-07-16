@@ -14,12 +14,12 @@ const App = (): React.JSX.Element => {
       <CardScreen
         checkoutKey={PUBLIC_KEY}
         cardTokenized={function (e: FrameCardTokenizedEvent): void {
-          throw new Error('Function not implemented.');
+          console.log('Card tokenized', e);
         }}
         cardTokenizationFailed={function (
           e: FrameCardTokenizationFailedEvent,
         ): void {
-          throw new Error('Function not implemented.');
+          console.log('Card tokenization failed', e);
         }}
       />
     </SafeAreaView>

@@ -39,13 +39,18 @@ yup.addMethod(string, 'cardExpiry', function (message: any) {
     if (year === currentYear && month < new Date().getMonth()) {
       return createError({path, message: message || 'Month is in past'});
     }
-
-    if (month < currentMonth && year < currentYear) {
-      return createError({path, message: message || 'Month is in past'});
+    if (year < currentYear) {
+      return createError({path, message: message || 'Year is in the past'});
     }
-    if (month > currentMonth && year === currentYear) {
-      return createError({path, message: message || 'Year is in past'});
+    if (
+      (month < currentMonth && year < currentYear) ||
+      (month > currentMonth && year < currentYear)
+    ) {
+      return createError({path, message: message || 'Date is already expired'});
     }
+    // if (month > currentMonth && year === currentYear) {
+    //   return createError({path, message: message || 'Year is in past'});
+    // }
 
     return true; // Valid expiry date
   });

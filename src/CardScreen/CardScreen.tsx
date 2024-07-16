@@ -101,7 +101,7 @@ export const CardScreen: FC<CardScreenProps> = ({
       const tokenizeBody: TokenizationParams = {
         key: checkoutKey,
         body: {
-          type: '',
+          type: 'card',
           number: data.cardNumber,
           expiry_month: data.expiryDate.split('/')[0],
           expiry_year: data.expiryDate.split('/')[1],

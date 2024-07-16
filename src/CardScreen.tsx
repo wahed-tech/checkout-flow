@@ -8,7 +8,7 @@ import {Button} from './ui/components/Button';
 import {Form, FormTextInput} from './ui/components/Form';
 import {FormCheckbox} from './ui/components/Form/FormCheckbox';
 import {Modal} from './ui/components/Modal';
-
+import {version} from '../package.json';
 declare module 'yup' {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface StringSchema<TType, TContext, TDefault, TFlags> {
@@ -116,25 +116,89 @@ export type FrameCardTokenizationFailedEvent = {
   request_id: string;
 };
 type CardScreenProps = {
-  tokenizeCard: () => void;
+  key: string;
   cardTokenized: (e: FrameCardTokenizedEvent) => void;
   cardTokenizationFailed?: (e: FrameCardTokenizationFailedEvent) => void;
 };
+export type TokenizationParams = {
+  key: string;
+  body: TokenizationBody;
+};
+export type TokenizationBody = {
+  type: string;
+  number: string;
+  expiry_month: string;
+  expiry_year: string;
+  cvv: string;
+  name?: string;
+  billing_address?: GatewayBillingAddress;
+  phone?: Phone;
+};
+export type Phone = {
+  number?: string;
+};
 
 export const CardScreen: FC<CardScreenProps> = ({
-  tokenizeCard,
+  key,
   cardTokenized,
   cardTokenizationFailed,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [shouldShow3dsModal, setShouldShow3dsModal] = useState(false);
   const [isError, setIsError] = useState(false);
-  const onPay = () => {
+
+  const tokenize = async (e: TokenizationParams) => {
+    // eslint-disable-next-line no-useless-catch
     try {
-      const a = tokenizeCard();
+      const response = await fetch(e.key, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'User-Agent': `frames-react-native/${version}`, // This can be changed based on wahed-app as user agent ?
+          Authorization: e.key,
+        },
+        body: JSON.stringify(e.body),
+      });
+
+      const json = await response.json();
+
+      if (response.ok) {
+        return json;
+      } else {
+        throw json;
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+  const onPay = (data: {
+    fullName: string;
+    cardNumber: string;
+    expiryDate: string;
+    cvv: string;
+    shouldSaveCard: true;
+  }) => {
+    setIsError(true);
+    try {
+      //    call to tokenize card
+      const tokenizedCard = tokenize({
+        key: key,
+        body: {
+          type: 'card',
+          number: data.cardNumber,
+          expiry_month: data.expiryDate.split('/')[0],
+          expiry_year: data.expiryDate.split('/')[1],
+          cvv: data.cvv,
+          name: data.fullName,
+          billing_address: undefined, // in case of billing address
+          phone: undefined, // in case phone number is required
+        },
+      });
       //    card is tokenized call what to do in success case
       //    in case 3ds is required set shouldShow3dsModal to true
-      cardTokenized(a as any);
+      setShouldShow3dsModal(true);
+      cardTokenized(tokenizedCard as unknown as FrameCardTokenizedEvent);
     } catch (error) {
       if (cardTokenizationFailed) {
         cardTokenizationFailed(error as any);

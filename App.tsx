@@ -11,15 +11,13 @@ const App = (): React.JSX.Element => {
   return (
     <SafeAreaView>
       <CardScreen
+        key="pk_test_1234567890"
         cardTokenized={function (e: FrameCardTokenizedEvent): void {
           throw new Error('Function not implemented.');
         }}
         cardTokenizationFailed={function (
           e: FrameCardTokenizationFailedEvent,
         ): void {
-          throw new Error('Function not implemented.');
-        }}
-        tokenizeCard={function (): void {
           throw new Error('Function not implemented.');
         }}
       />

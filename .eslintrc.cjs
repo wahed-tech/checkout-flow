@@ -1,14 +1,14 @@
 module.exports = {
   root: true,
   env: {
-    es6: true,
+    es6: true
   },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:consistent-default-export-name/fixed',
-    'plugin:prettier/recommended',
+    'plugin:prettier/recommended'
   ],
   plugins: [
     'react',
@@ -18,20 +18,20 @@ module.exports = {
     'react-hooks',
     'unicorn',
     'import',
-    'prettier',
+    'prettier'
   ],
   settings: {
     ecmaVersion: 'latest',
     react: {
-      version: 'detect',
-    },
+      version: 'detect'
+    }
   },
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
     ecmaFeatures: {
-      jsx: true,
-    },
+      jsx: true
+    }
   },
   rules: {
     'import/no-duplicates': 'error',
@@ -45,9 +45,9 @@ module.exports = {
           '**/*.spec.[jt]s',
           '**/*.test.[jt]sx',
           '**/*.spec.[jt]sx',
-          'ReactotronConfig.js',
-        ],
-      },
+          'ReactotronConfig.js'
+        ]
+      }
     ],
     'sort-imports': ['error', {ignoreCase: true, ignoreDeclarationSort: true}],
     'import/order': [
@@ -57,37 +57,37 @@ module.exports = {
         pathGroups: [
           {
             pattern: '$/**',
-            group: 'internal',
-          },
+            group: 'internal'
+          }
         ],
         pathGroupsExcludedImportTypes: ['builtin'],
         groups: [
           ['builtin', 'external'],
           ['internal'],
           ['parent', 'sibling', 'index'],
-          'unknown',
-        ],
-      },
+          'unknown'
+        ]
+      }
     ],
     'import/no-cycle': [
       'error',
       {
         maxDepth: '∞',
-        ignoreExternal: true,
-      },
+        ignoreExternal: true
+      }
     ],
     /* additional rules previously used */
     'react/react-in-jsx-scope': 'off',
     'react/jsx-curly-brace-presence': [
       'warn',
-      {props: 'never', children: 'never'},
+      {props: 'never', children: 'never'}
     ],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': [
       'error',
       {
-        additionalHooks: '(useRecoilCallback|useRecoilTransaction_UNSTABLE)',
-      },
+        additionalHooks: '(useRecoilCallback|useRecoilTransaction_UNSTABLE)'
+      }
     ],
     'react/display-name': 'off',
     'react/prop-types': 'off',
@@ -101,8 +101,8 @@ module.exports = {
       'error',
       {
         namedComponents: 'arrow-function',
-        unnamedComponents: 'arrow-function',
-      },
+        unnamedComponents: 'arrow-function'
+      }
     ],
     'react/no-access-state-in-setstate': 'error',
     'default-case': 'error',
@@ -147,9 +147,9 @@ module.exports = {
           'profile',
           'profileEnd',
           'timeStamp',
-          'context',
-        ],
-      },
+          'context'
+        ]
+      }
     ],
     'no-eval': 'error',
     'no-new-wrappers': 'error',
@@ -160,8 +160,8 @@ module.exports = {
       'error',
       'always',
       {
-        markers: ['/'],
-      },
+        markers: ['/']
+      }
     ],
     'consistent-default-export-name/default-export-match-filename': 'error',
     'consistent-default-export-name/default-import-match-filename': 'error',
@@ -170,25 +170,25 @@ module.exports = {
       {
         cases: {
           camelCase: true,
-          pascalCase: true,
-        },
-      },
+          pascalCase: true
+        }
+      }
     ],
-    'eol-last': ['error', 'always'],
+    'eol-last': ['error', 'always']
   },
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
       extends: [
         'plugin:@typescript-eslint/eslint-recommended',
-        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking'
       ],
       plugins: ['@typescript-eslint/eslint-plugin'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
         project: './tsconfig.json',
         tsconfigRootDir: __dirname,
-        sourceType: 'module',
+        sourceType: 'module'
       },
       rules: {
         '@typescript-eslint/no-use-before-define': [
@@ -200,8 +200,8 @@ module.exports = {
             functions: true,
             classes: true,
             variables: true,
-            allowNamedExports: true,
-          },
+            allowNamedExports: true
+          }
         ],
         '@typescript-eslint/no-empty-function': 'off',
         '@typescript-eslint/no-unused-vars': 'warn',
@@ -235,8 +235,8 @@ module.exports = {
         '@typescript-eslint/ban-ts-comment': [
           'error',
           {
-            'ts-ignore': 'allow-with-description',
-          },
+            'ts-ignore': 'allow-with-description'
+          }
         ],
         '@typescript-eslint/naming-convention': [
           'error',
@@ -244,16 +244,16 @@ module.exports = {
             selector: 'variable',
             types: ['boolean'],
             format: ['PascalCase'],
-            prefix: ['is', 'should', 'has', 'can', 'did', 'will', 'was'],
+            prefix: ['is', 'should', 'has', 'can', 'did', 'will', 'was']
           },
           {
             selector: 'variable',
             modifiers: ['destructured'],
-            format: null,
+            format: null
           },
           {
             selector: 'variable',
-            format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
+            format: ['camelCase', 'PascalCase', 'UPPER_CASE']
           },
           {selector: 'function', format: ['camelCase']},
           {selector: 'class', format: ['PascalCase']},
@@ -261,15 +261,15 @@ module.exports = {
           {selector: 'enumMember', format: ['PascalCase', 'UPPER_CASE']},
           {selector: 'interface', format: ['PascalCase']},
           {selector: 'typeAlias', format: ['PascalCase']},
-          {selector: 'parameter', format: ['camelCase']},
-        ],
-      },
+          {selector: 'parameter', format: ['camelCase']}
+        ]
+      }
     },
     {
       files: ['./**/*.test.ts'],
       rules: {
-        '@typescript-eslint/naming-convention': 'off',
-      },
-    },
-  ],
+        '@typescript-eslint/naming-convention': 'off'
+      }
+    }
+  ]
 };
